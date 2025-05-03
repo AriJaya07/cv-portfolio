@@ -1,0 +1,183 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ profile.name }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+      .card-container {
+        border: 1px solid #333;  
+        border-radius: 50px;
+        margin-bottom: 5rem;
+      }
+
+      .theme-toggle{
+        display: flex;
+        margin: auto;
+        max-width: 1024px;
+        justify-content: end;
+        margin-top: 3rem;
+        padding-right: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 26px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 26px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+      }
+
+      input:checked + .slider {
+        background-color: #333;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(24px);
+      }
+
+      [data-theme="light"] .subtitle, .contact {
+        color: #696868;
+      }
+    </style>
+  </head>
+  <body class="">
+    <div class="theme-toggle">
+      <label class="switch">
+        <input type="checkbox" id="toggleTheme" />
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <div class="container fade-in card-container">
+      <header class="header">
+        {% if profile.photo %}
+        <img
+          src="{{ profile.photo.url }}"
+          alt="{{ profile.name }}"
+          class="avatar bounce"
+        />
+        {% endif %}
+        <h1 class="typing">{{ profile.name }}</h1>
+        <p class="subtitle" style="line-height: 24px;">{{ profile.description }}</p>
+        <div
+          class="contact"
+          style="display: flex; justify-content: end; gap: 20px;"
+        >
+          <div class="" style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+            <img 
+              src="/media/social/gmail.png" 
+              alt="Gmail" 
+              class="social-img" 
+              style="width: 20px; height: 20px; background: white; border-radius: 100%" 
+            />
+            <p>{{ profile.email }}</p>
+          </div>
+          <div class="" style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+            <img 
+              src="/media/social/telpone.png" 
+              alt="Gmail" 
+              class="social-img" 
+              style="width: 20px; height: 20px; background: white; border-radius: 100%" 
+            />
+            <p>{{ profile.phone }}</p>
+          </div>
+          <div class="" style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+            <img 
+              src="/media/social/location.png"
+              alt="Gmail" 
+              class="social-img" 
+              style="width: 20px; height: 20px; background: white; border-radius: 100%" 
+            />
+            <p>{{ profile.location }}</p>
+          </div>
+        </div>
+      </header>
+
+      <section class="section">
+        <h2>Experiences</h2>
+        {% for exp in experiences %}
+        <div class="card slide-up" style="cursor: pointer;">
+          <h3>{{ exp.title }} @{{ exp.company }}</h3>
+          <p class="date">
+            {{ exp.start_year }} - {{ exp.end_year|default:"Now" }}
+          </p>
+          <p style="line-height: 24px">{{ exp.description }}</p>
+        </div>
+        {% endfor %}
+      </section>
+
+      <section class="section">
+        <h2>Skills</h2>
+        <ul class="skills">
+          {% for skill in skills %}
+          <li class="pop-in" style="line-height: 24px;">
+            {{ skill.name }}{% if skill.level %} - {{ skill.level }}{% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section class="section">
+        <h2>Find Me</h2>
+        <div class="socials" style="display: flex; flex-direction: row; justify-content: start; margin-left: 2rem;">
+          {% for social in socials %} {% if social.platform|lower == 'upwork' or social.platform|lower == 'linkedin' or social.platform|lower == 'youtube' %}
+          <div
+            class="social-icon"
+            style="
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 10px;
+            "
+          >
+            <img
+              src="/media/social/{{ social.platform|lower }}.png"
+              alt="{{ social.platform }}"
+              class="social-img"
+              style="width: 50px; background: white; border-radius: 100%; cursor: pointer;"
+            />
+            <a href="{{ social.url }}" target="_blank" class="social-btn pulse">
+              {{ social.platform }}
+            </a>
+          </div>
+          {% endif %} {% endfor %}
+        </div>
+      </section>
+    </div>
+
+    <script src="{% static 'js/script.js' %}"></script>
+  </body>
+</html>
